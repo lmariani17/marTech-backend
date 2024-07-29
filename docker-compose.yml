@@ -7,3 +7,29 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
+      TYPEORM_CONNECTION: mysql
+      TYPEORM_HOST: ${DB_HOST}
+      TYPEORM_USERNAME: ${DB_USERNAME}
+      TYPEORM_PASSWORD: ${DB_PASSWORD}
+      TYPEORM_DATABASE: ${DB_DATABASE}
+      TYPEORM_PORT: ${DB_PORT}
+      TYPEORM_SYNCHRONIZE: ${TYPEORM_SYNCHRONIZE}
+      TYPEORM_LOGGING: ${TYPEORM_LOGGING}
+      TYPEORM_ENTITIES: "src/entity/**/*.ts"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

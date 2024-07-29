@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { MockCampaignRepository } from '../repositories/MockCampaignRepository';
 import { CampaignController } from '../controllers/CampaignController';
+import { CampaignRepository } from '../repositories/CampaignRepository';
 
 const router = Router();
-const campaignRepository = new MockCampaignRepository();
+const campaignRepository = new CampaignRepository();
 const campaignController = new CampaignController(campaignRepository);
 
 router.post('/campaigns', campaignController.createCampaign.bind(campaignController));

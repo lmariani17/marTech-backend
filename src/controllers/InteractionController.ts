@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { InteractionRepository, Interaction } from '../repositories/InteractionRepository';
+import { InteractionRepository } from '../repositories/InteractionRepository';
+import { Interaction } from '../entity/Interaction';
 
 export class InteractionController {
   constructor(private interactionRepository: InteractionRepository) {}

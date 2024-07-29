@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { CampaignRepository, Campaign } from '../repositories/CampaignRepository';
+import { CampaignRepository } from '../repositories/CampaignRepository';
+import { Campaign } from '../entity/Campaign';
 
 export class CampaignController {
   constructor(private campaignRepository: CampaignRepository) {}

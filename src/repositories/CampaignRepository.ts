@@ -1,16 +1,28 @@
-export interface Campaign {
-    id: number;
-    name: string;
-    startDate: Date;
-    endDate: Date;
-    budget: number;
+import { AppDataSource } from '../../data-source'; // Asegúrate de que la ruta sea correcta
+import { Campaign } from '../entity/Campaign';
+
+export class CampaignRepository {
+  private repository = AppDataSource.getRepository(Campaign);
+
+  async createCampaign(campaign: Campaign): Promise<Campaign> {
+    return await this.repository.save(campaign);
   }
-  
-  export interface CampaignRepository {
-    createCampaign(campaign: Campaign): Promise<Campaign>;
-    getAllCampaigns(): Promise<Campaign[]>;
-    getCampaignById(id: number): Promise<Campaign | null>;
-    updateCampaign(id: number, campaign: Partial<Campaign>): Promise<Campaign | null>;
-    deleteCampaign(id: number): Promise<boolean>;
+
+  async getAllCampaigns(): Promise<Campaign[]> {
+    return await this.repository.find();
   }
-  
+
+  async getCampaignById(id: number): Promise<Campaign | null> {
+    return await this.repository.findOneBy({ id }) || null;
+  }
+
+  async updateCampaign(id: number, campaign: Partial<Campaign>): Promise<Campaign | null> {
+    await this.repository.update(id, campaign);
+    return this.getCampaignById(id);
+  }
+
+  async deleteCampaign(id: number): Promise<boolean> {
+    const result = await this.repository.delete(id);
+    return result.affected !== 0;
+  }
+}
