@@ -16,7 +16,7 @@ const startServer = async () => {
   while (retries) {
     try {
       await AppDataSource.initialize();
-      console.log('Data Source has been initialized!');
+      console.log('[APP] Data Source has been initialized!');
       
       app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
@@ -24,7 +24,7 @@ const startServer = async () => {
       
       break;
     } catch (err: any) {
-      console.error('Error during Data Source initialization', err);
+      console.error('[APP] Error during Data Source initialization', err);
       retries -= 1;
       console.log(`Retries left: ${retries}`);
       await new Promise(res => setTimeout(res, 5000));

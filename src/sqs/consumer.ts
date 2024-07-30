@@ -13,16 +13,19 @@ const sqsClient = new SQSClient({
 const processMessage = async (messageBody: string) => {
   const { campaignId, interactionType } = JSON.parse(messageBody);
   const campaignRepository = AppDataSource.getRepository(Campaign);
+  
+  try {
+    const campaign = await campaignRepository.findOne({ where: { id: Number(campaignId), deletedAt: undefined } });
+    if (campaign) {
+      if (interactionType === 'some_type') {
+        campaign.budget -= 10;
+      }
 
-  const campaign = await campaignRepository.findOneBy({ id: campaignId });
-
-  if (campaign) {
-    if (interactionType === 'some_type') {
-      campaign.budget -= 10;
+      await campaignRepository.save(campaign);
+      console.log('Campaign updated successfully');
     }
-
-    await campaignRepository.save(campaign);
-    console.log('Campaign updated successfully');
+  } catch (error: any) {
+    console.error('Error processing message', error);
   }
 };
 
@@ -35,7 +38,7 @@ const consumeMessages = async () => {
 
   try {
     const response = await sqsClient.send(command);
-
+    
     if (response.Messages) {
       for (const message of response.Messages) {
         await processMessage(message.Body!);
@@ -53,4 +56,12 @@ const consumeMessages = async () => {
   }
 };
 
-setInterval(consumeMessages, 30000);
+
+AppDataSource.initialize()
+  .then(() => {
+    console.log('[CONSUMER] Data Source has been initialized!');
+    setInterval(consumeMessages, 5000);
+  })
+  .catch((err) => {
+    console.error('Error during Data Source initialization', err);
+  });

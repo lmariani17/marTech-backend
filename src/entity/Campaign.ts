@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn } from 'typeorm';
 
 @Entity()
 export class Campaign {
@@ -8,14 +8,17 @@ export class Campaign {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'date', nullable: true })
   startDate: Date;
 
-  @Column()
+  @Column({ type: 'date', nullable: true })
   endDate: Date;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   budget: number;
+
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  deletedAt?: Date;
 
   constructor(name: string, startDate: Date, endDate: Date, budget: number) {
     this.name = name;

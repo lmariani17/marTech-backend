@@ -9,20 +9,25 @@ export class CampaignRepository {
   }
 
   async getAllCampaigns(): Promise<Campaign[]> {
-    return await this.repository.find();
+    return await this.repository.find({ where: { deletedAt: undefined } });
   }
 
   async getCampaignById(id: number): Promise<Campaign | null> {
-    return await this.repository.findOneBy({ id }) || null;
+    return await this.repository.findOne({ where: { id, deletedAt: undefined } });
   }
 
-  async updateCampaign(id: number, campaign: Partial<Campaign>): Promise<Campaign | null> {
-    await this.repository.update(id, campaign);
-    return this.getCampaignById(id);
+  async updateCampaign(id: number, updatedCampaign: Partial<Campaign>): Promise<Campaign | null> {
+    const campaign = await this.repository.findOne({ where: { id, deletedAt: undefined } });
+    if (campaign) {
+      Object.assign(campaign, updatedCampaign);
+      return await this.repository.save(campaign);
+    }
+    
+    return null;
   }
 
   async deleteCampaign(id: number): Promise<boolean> {
-    const result = await this.repository.delete(id);
+    const result = await this.repository.softDelete(id);
     return result.affected !== 0;
   }
 }
