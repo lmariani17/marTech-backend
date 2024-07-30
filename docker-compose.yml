@@ -16,6 +16,10 @@ services:
       TYPEORM_SYNCHRONIZE: ${TYPEORM_SYNCHRONIZE}
       TYPEORM_LOGGING: ${TYPEORM_LOGGING}
       TYPEORM_ENTITIES: "src/entity/**/*.ts"
+      SQS_QUEUE_URL: "${SQS_QUEUE_URL}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "${AWS_REGION}"
     depends_on:
       - db
     env_file:
@@ -30,6 +34,19 @@ services:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["npm", "run", "qeue"]
+    environment:
+      SQS_QUEUE_URL: "${SQS_QUEUE_URL}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "${AWS_REGION}"
+    depends_on:
+      - db
 
 volumes:
   db_data:
