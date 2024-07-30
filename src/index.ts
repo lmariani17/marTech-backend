@@ -3,11 +3,13 @@ import express from 'express';
 import { AppDataSource } from '../data-source';
 import campaignsRoutes from './routes/campaigns';
 import interactionsRoutes from './routes/interactions';
+import authRoutes from './routes/auth';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use('/api', authRoutes);
 app.use('/api', campaignsRoutes);
 app.use('/api', interactionsRoutes);
 
