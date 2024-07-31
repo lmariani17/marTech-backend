@@ -1,6 +1,7 @@
 import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
 import { Campaign } from '../entity/Campaign';
 import { AppDataSource } from '../../data-source';
+import { EventType } from '../common/eventTypes';
 
 const sqsClient = new SQSClient({
   region: process.env.AWS_REGION,
@@ -13,16 +14,24 @@ const sqsClient = new SQSClient({
 const processMessage = async (messageBody: string) => {
   const { campaignId, interactionType } = JSON.parse(messageBody);
   const campaignRepository = AppDataSource.getRepository(Campaign);
-  
+
   try {
     const campaign = await campaignRepository.findOne({ where: { id: Number(campaignId), deletedAt: undefined } });
     if (campaign) {
-      if (interactionType === 'some_type') {
-        campaign.budget -= 10;
+      switch (interactionType) {
+        case EventType.CLICK:
+          campaign.budget -= 1000;
+          await campaignRepository.save(campaign);
+          console.log(`Click event processed. Budget decreased by 1000.`);
+          break;
+        case EventType.ADD:
+          campaign.budget += 1000;
+          await campaignRepository.save(campaign);
+          console.log(`Add event processed. Budget increased by 1000.`);
+          break;
+        default:
+          console.log(`Unknown interaction type: ${interactionType}`);
       }
-
-      await campaignRepository.save(campaign);
-      console.log('Campaign updated successfully');
     }
   } catch (error: any) {
     console.error('Error processing message', error);
@@ -38,11 +47,11 @@ const consumeMessages = async () => {
 
   try {
     const response = await sqsClient.send(command);
-    
+
     if (response.Messages) {
       for (const message of response.Messages) {
         await processMessage(message.Body!);
-        
+
         const deleteCommand = new DeleteMessageCommand({
           QueueUrl: process.env.SQS_QUEUE_URL,
           ReceiptHandle: message.ReceiptHandle!,
@@ -56,12 +65,22 @@ const consumeMessages = async () => {
   }
 };
 
+const startConsumer = async () => {
+  let retries = 5;
+  while (retries) {
+    try {
+      await AppDataSource.initialize();
+      console.log('[CONSUMER] Data Source has been initialized!');
+      setInterval(consumeMessages, 5000);
 
-AppDataSource.initialize()
-  .then(() => {
-    console.log('[CONSUMER] Data Source has been initialized!');
-    setInterval(consumeMessages, 5000);
-  })
-  .catch((err) => {
-    console.error('Error during Data Source initialization', err);
-  });
+      break;
+    } catch (err: any) {
+      console.error('[CONSUMER] Error during Data Source initialization', err);
+      retries -= 1;
+      console.log(`Retries left: ${retries}`);
+      await new Promise(res => setTimeout(res, 5000));
+    }
+  }
+};
+
+startConsumer();

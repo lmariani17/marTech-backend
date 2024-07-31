@@ -14,7 +14,7 @@ export class Campaign {
   @Column({ type: 'date', nullable: true })
   endDate: Date;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column()
   budget: number;
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })

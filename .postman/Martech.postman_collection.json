@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "8a896c5d-2164-498e-8a31-99059551145a",
+		"name": "Martech",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7646217"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user.test@martech.com\",\n    \"password\": \"myMartechPassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all campaigns",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/campaigns",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"campaigns"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a campaigns",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6InVzZXIudGVzdEBtYXJ0ZWNoLmNvbSIsImlhdCI6MTcyMjM5NzA5MSwiZXhwIjoxNzIyNDAwNjkxfQ.giXwh83g5evdcLuQZTfJC0vyRb1eQRSoypq_fEesMd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/campaigns/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"campaigns",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update campaigns",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Campaña de Primavera\",\n  \"startDate\": \"2024-09-21\",\n  \"endDate\": \"2024-12-21\",\n  \"budget\": 180000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/campaigns/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"campaigns",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete campaigns",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/campaigns/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"campaigns",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create campaigns",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Campaña de Primavera con Descuentos\",\n  \"startDate\": \"2024-09-21\",\n  \"endDate\": \"2024-12-21\",\n  \"budget\": 250000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/campaigns",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"campaigns"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create interactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6InVzZXIudGVzdEBtYXJ0ZWNoLmNvbSIsImlhdCI6MTcyMjM5NzA5MSwiZXhwIjoxNzIyNDAwNjkxfQ.giXwh83g5evdcLuQZTfJC0vyRb1eQRSoypq_fEesMd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"campaignId\": 1,\n  \"userId\": 1,\n  \"interactionType\": \"click\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/interactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"interactions"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
