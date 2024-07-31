@@ -4,11 +4,14 @@ import { AppDataSource } from '../data-source';
 import campaignsRoutes from './routes/campaigns';
 import interactionsRoutes from './routes/interactions';
 import authRoutes from './routes/auth';
+import swaggerSpec from './swaggerOptions';
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', authRoutes);
 app.use('/api', campaignsRoutes);
 app.use('/api', interactionsRoutes);
