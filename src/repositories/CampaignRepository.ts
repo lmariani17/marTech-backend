@@ -1,4 +1,4 @@
-import { AppDataSource } from '../../data-source'; // Asegúrate de que la ruta sea correcta
+import { AppDataSource } from '../../data-source';
 import { Campaign } from '../entity/Campaign';
 
 export class CampaignRepository {

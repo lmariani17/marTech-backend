@@ -6,12 +6,12 @@ import { validate } from 'class-validator';
 import { CampaignDTO } from '../dto/CampaignDTO';
 
 export class CampaignController {
-  constructor(private campaignRepository: CampaignRepository) {}
+  constructor(private campaignRepository: CampaignRepository) { }
 
   async createCampaign(req: Request, res: Response) {
     const dto = plainToClass(CampaignDTO, req.body);
     const errors = await validate(dto);
-      
+
     if (errors.length > 0) {
       return res.status(400).json({ errors });
     }
@@ -59,7 +59,7 @@ export class CampaignController {
       return res.status(400).json({ errors });
     }
 
-    const updatedCampaign = {...dto}
+    const updatedCampaign = { ...dto }
 
     try {
       const campaign = await this.campaignRepository.updateCampaign(Number(id), updatedCampaign);
